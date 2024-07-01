@@ -1,42 +1,67 @@
-const slides = [
-	{
-		"image":"slide1.jpg",
-		"tagLine":"Impressions tous formats <span>en boutique et en ligne</span>"
-	},
-	{
-		"image":"slide2.jpg",
-		"tagLine":"Tirages haute définition grand format <span>pour vos bureaux et events</span>"
-	},
-	{
-		"image":"slide3.jpg",
-		"tagLine":"Grand choix de couleurs <span>de CMJN aux pantones</span>"
-	},
-	{
-		"image":"slide4.png",
-		"tagLine":"Autocollants <span>avec découpe laser sur mesure</span>"
-	}
-]
+document.addEventListener('DOMContentLoaded', () => {
+    const slides = [
+        {
+            "image": "slide1.jpg",
+            "tagLine": "Impressions tous formats <span>en boutique et en ligne</span>"
+        },
+        {
+            "image": "slide2.jpg",
+            "tagLine": "Tirages haute définition grand format <span>pour vos bureaux et events</span>"
+        },
+        {
+            "image": "slide3.jpg",
+            "tagLine": "Grand choix de couleurs <span>de CMJN aux pantones</span>"
+        },
+        {
+            "image": "slide4.png",
+            "tagLine": "Autocollants <span>avec découpe laser sur mesure</span>"
+        }
+    ];
+
+    let compteur = 0;
+
+    // Créer des constantes en fonction des éléments HTML dont on a besoin
+    const arrowLeft = document.querySelector('.arrow_left .btn');
+    const arrowRight = document.querySelector('.arrow_right .btn');
+    const bannerImg = document.querySelector('.banner-img');
+    const tagLine = document.querySelector('#banner p');
+    const dots = document.querySelectorAll('.dot');
 
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Sélectionner les boutons de navigation gauche et droite
-    //const arrowLeft = document.querySelector('.arrow_left'); // Sélectionner le bouton de la flèche gauche
-    //const arrowRight = document.querySelector('.arrow_right'); // Sélectionner le bouton de la flèche droite
+    // Fonction pour changer l'image et la tagline
+    function changeImage() {
+        bannerImg.src = `./assets/images/slideshow/${slides[compteur].image}`;
+        tagLine.innerHTML = slides[compteur].tagLine;
+    }
 
-// Vérifier la récupération des éléments dans la console
-console.log('Flèche gauche:', arrowLeft); // Devrait afficher le bouton de la flèche gauche dans la console
-console.log('Flèche droite:', arrowRight); // Devrait afficher le bouton de la flèche droite dans la console
+    // Fonction pour mettre à jour les dots
+    function changeDots() {
+        dots.forEach((dot, index) => {
+            if (index === compteur) {
+                dot.classList.add('dot_selected');
+            } else {
+                dot.classList.remove('dot_selected');
+            }
+        });
+    }
 
- // Ajouter des écouteurs d'événements pour tester le clic sur les flèches
- arrowLeft.addEventListener('click', function () {
-	console.log('Flèche gauche cliquée'); // Afficher un message dans la console pour la flèche gauche
-	alert('Flèche gauche cliquée'); // Afficher une alerte pour la flèche gauche
+    // Fonction pour gérer le changement de slide
+    function updateSlide() {
+        changeImage();
+        changeDots();
+    }
+
+    // Ajouter des écouteurs d'événements pour les flèches
+    arrowLeft.addEventListener('click', function() {
+        compteur = (compteur === 0) ? slides.length - 1 : compteur - 1;
+        updateSlide();
+    });
+
+    arrowRight.addEventListener('click', function() {
+        compteur = (compteur === slides.length - 1) ? 0 : compteur + 1;
+        updateSlide();
+    });
+
+    // Afficher le premier slide au chargement de la page
+    updateSlide();
 });
-
-arrowRight.addEventListener('click', function () {
-	console.log('Flèche droite cliquée'); // Afficher un message dans la console pour la flèche droite
-	alert('Flèche droite cliquée'); // Afficher une alerte pour la flèche droite
-});
-
-
-})
