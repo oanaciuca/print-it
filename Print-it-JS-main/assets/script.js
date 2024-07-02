@@ -20,21 +20,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let compteur = 0;
 
-    // Créer des constantes en fonction des éléments HTML dont on a besoin
+    // Sélection des éléments DOM
     const arrowLeft = document.querySelector('.arrow_left .btn');
     const arrowRight = document.querySelector('.arrow_right .btn');
-    const bannerImg = document.querySelector('.banner-img');
-    const tagLine = document.querySelector('#banner p');
+    const banner = document.querySelector('#banner');
+    const dotsContainer = document.querySelector('.dots');
+
+    // Vérifiez si les éléments sont bien trouvés
+    if (!arrowLeft) {
+        console.error('La flèche gauche n\'est pas trouvée dans le DOM.');
+        return;
+    }
+    if (!arrowRight) {
+        console.error('La flèche droite n\'est pas trouvée dans le DOM.');
+        return;
+    }
+    if (!banner) {
+        console.error('La bannière n\'est pas trouvée dans le DOM.');
+        return;
+    }
+    if (!dotsContainer) {
+        console.error('Le conteneur des dots n\'est pas trouvé dans le DOM.');
+        return;
+    }
+
+    // Création dynamique de la balise image et de la balise p pour la tagline
+    const bannerImg = document.createElement('img');
+    bannerImg.classList.add('banner-img');
+    bannerImg.alt = 'Banner Image';
+    
+    const tagLine = document.createElement('p');
+
+    // Ajout de l'image et de la tagline au banner en une seule fois
+    banner.append(bannerImg, tagLine);
+
+    // Création dynamique des dots
+    slides.forEach((slide, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (index === 0) {
+            dot.classList.add('dot_selected');
+        }
+        dotsContainer.append(dot);
+    });
+
     const dots = document.querySelectorAll('.dot');
 
-
-    // Fonction pour changer l'image et la tagline
     function changeImage() {
         bannerImg.src = `./assets/images/slideshow/${slides[compteur].image}`;
         tagLine.innerHTML = slides[compteur].tagLine;
     }
 
-    // Fonction pour mettre à jour les dots
     function changeDots() {
         dots.forEach((dot, index) => {
             if (index === compteur) {
@@ -45,23 +81,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fonction pour gérer le changement de slide
     function updateSlide() {
         changeImage();
         changeDots();
     }
 
-    // Ajouter des écouteurs d'événements pour les flèches
+    // Écouteur d'événement pour la flèche gauche
     arrowLeft.addEventListener('click', function() {
+        console.log('Clic sur la flèche gauche');
         compteur = (compteur === 0) ? slides.length - 1 : compteur - 1;
+        console.log('Compteur après clic gauche:', compteur);
         updateSlide();
     });
 
+    // Écouteur d'événement pour la flèche droite
     arrowRight.addEventListener('click', function() {
+        console.log('Clic sur la flèche droite');
         compteur = (compteur === slides.length - 1) ? 0 : compteur + 1;
+        console.log('Compteur après clic droit:', compteur);
         updateSlide();
     });
 
-    // Afficher le premier slide au chargement de la page
-    updateSlide();
+    updateSlide(); // Affiche le premier slide au chargement de la page
 });
